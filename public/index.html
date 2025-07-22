@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme">
+        <span class="theme-icon">🌙</span>
+    </button>
+    
     <div class="container">
         <div class="login-container" id="loginContainer">
             <div class="login-header">
@@ -26,7 +31,12 @@
                 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <div class="password-input-container">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <button type="button" id="togglePassword" class="password-toggle-btn" aria-label="Toggle password visibility">
+                            <span class="eye-icon">👁️</span>
+                        </button>
+                    </div>
                 </div>
                 
                 <button type="submit" class="login-btn">
@@ -60,13 +70,23 @@
                 
                 <div class="form-group">
                     <label for="regPassword">Password</label>
-                    <input type="password" id="regPassword" name="password" placeholder="Create a strong password" required>
+                    <div class="password-input-container">
+                        <input type="password" id="regPassword" name="password" placeholder="Create a strong password" required>
+                        <button type="button" id="toggleRegPassword" class="password-toggle-btn" aria-label="Toggle password visibility">
+                            <span class="eye-icon">👁️</span>
+                        </button>
+                    </div>
                     <small class="form-hint">Min 8 chars: uppercase, lowercase, number, special char</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                    <div class="password-input-container">
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                        <button type="button" id="toggleConfirmPassword" class="password-toggle-btn" aria-label="Toggle password visibility">
+                            <span class="eye-icon">👁️</span>
+                        </button>
+                    </div>
                 </div>
                 
                 <button type="submit" class="register-btn">
@@ -88,19 +108,74 @@
         <div class="dashboard-container" id="dashboardContainer" style="display: none;">
             <div class="dashboard-header">
                 <h1>Dashboard</h1>
-                <button id="logoutBtn" class="logout-btn">Logout</button>
+                <div class="header-actions">
+                    <button id="refreshBtn" class="refresh-btn" title="Refresh Data">🔄</button>
+                    <button id="logoutBtn" class="logout-btn">Logout</button>
+                </div>
             </div>
             
             <div class="dashboard-content">
                 <div class="welcome-card">
                     <h2>Welcome, <span id="userDisplay"></span>! 👋</h2>
                     <p>You have successfully authenticated with JWT</p>
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Login Time</span>
+                            <span class="stat-value" id="loginTime"></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Session Duration</span>
+                            <span class="stat-value" id="sessionDuration"></span>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="token-info">
-                    <h3>🔐 Your JWT Token</h3>
-                    <div class="token-display" id="tokenDisplay"></div>
-                    <button id="copyTokenBtn" class="copy-btn">📋 Copy Token</button>
+                <div class="dashboard-grid">
+                    <div class="token-info">
+                        <h3>🔐 Your JWT Token</h3>
+                        <div class="token-display" id="tokenDisplay"></div>
+                        <div class="token-actions">
+                            <button id="copyTokenBtn" class="copy-btn">📋 Copy Token</button>
+                            <button id="validateTokenBtn" class="validate-btn">✅ Validate Token</button>
+                        </div>
+                    </div>
+                    
+                    <div class="api-status">
+                        <h3>🌐 API Status</h3>
+                        <div class="status-grid">
+                            <div class="status-item">
+                                <span class="status-label">Authentication</span>
+                                <span class="status-value" id="authStatus">🟢 Online</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Protected Routes</span>
+                                <span class="status-value" id="protectedStatus">🟢 Online</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Rate Limiting</span>
+                                <span class="status-value" id="rateLimitStatus">🟢 Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <h3>⚡ Quick Actions</h3>
+                        <div class="action-buttons">
+                            <button id="testAuthBtn" class="action-btn">🔑 Test Auth</button>
+                            <button id="viewProfileBtn" class="action-btn">👤 View Profile</button>
+                            <button id="apiDocsBtn" class="action-btn">📚 API Docs</button>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-log">
+                        <h3>📝 Recent Activity</h3>
+                        <div class="log-entries" id="activityLog">
+                            <div class="log-entry">
+                                <span class="log-time">Just now</span>
+                                <span class="log-message">Successfully logged in</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

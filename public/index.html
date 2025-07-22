@@ -34,7 +34,55 @@
                 </button>
             </form>
             
+            <div class="form-divider">
+                <span>or</span>
+            </div>
+            
+            <button id="showRegisterBtn" class="register-link-btn">
+                Create a new account
+            </button>
+            
             <div id="errorMessage" class="error-message"></div>
+        </div>
+
+        <div class="register-container" id="registerContainer" style="display: none;">
+            <div class="register-header">
+                <h1>Create Account</h1>
+                <p>Join our secure platform</p>
+            </div>
+            
+            <form id="registerForm" class="register-form">
+                <div class="form-group">
+                    <label for="regUsername">Username</label>
+                    <input type="text" id="regUsername" name="username" placeholder="Choose a username (3-20 chars)" required>
+                    <small class="form-hint">Letters, numbers, and underscores only</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" name="password" placeholder="Create a strong password" required>
+                    <small class="form-hint">Min 8 chars: uppercase, lowercase, number, special char</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+                
+                <button type="submit" class="register-btn">
+                    <span class="btn-text">Create Account</span>
+                </button>
+            </form>
+            
+            <div class="form-divider">
+                <span>or</span>
+            </div>
+            
+            <button id="showLoginBtn" class="login-link-btn">
+                Already have an account? Sign in
+            </button>
+            
+            <div id="registerErrorMessage" class="error-message"></div>
         </div>
 
         <div class="dashboard-container" id="dashboardContainer" style="display: none;">

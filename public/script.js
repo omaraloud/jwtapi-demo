@@ -1,12 +1,17 @@
 // DOM elements
 const loginContainer = document.getElementById('loginContainer');
+const registerContainer = document.getElementById('registerContainer');
 const dashboardContainer = document.getElementById('dashboardContainer');
 const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
 const errorMessage = document.getElementById('errorMessage');
+const registerErrorMessage = document.getElementById('registerErrorMessage');
 const userDisplay = document.getElementById('userDisplay');
 const tokenDisplay = document.getElementById('tokenDisplay');
 const logoutBtn = document.getElementById('logoutBtn');
 const copyTokenBtn = document.getElementById('copyTokenBtn');
+const showRegisterBtn = document.getElementById('showRegisterBtn');
+const showLoginBtn = document.getElementById('showLoginBtn');
 
 // Check if user is already logged in
 function checkAuthStatus() {
@@ -23,13 +28,16 @@ function checkAuthStatus() {
 // Show login form
 function showLogin() {
     loginContainer.style.display = 'block';
+    registerContainer.style.display = 'none';
     dashboardContainer.style.display = 'none';
     errorMessage.textContent = '';
+    registerErrorMessage.textContent = '';
 }
 
 // Show dashboard
 function showDashboard(username, token) {
     loginContainer.style.display = 'none';
+    registerContainer.style.display = 'none';
     dashboardContainer.style.display = 'block';
     
     userDisplay.textContent = username;
@@ -116,6 +124,89 @@ copyTokenBtn.addEventListener('click', async () => {
         console.error('Failed to copy token:', error);
         alert('Failed to copy token. Please copy it manually.');
     }
+});
+
+// Show registration form
+function showRegister() {
+    loginContainer.style.display = 'none';
+    registerContainer.style.display = 'block';
+    dashboardContainer.style.display = 'none';
+    errorMessage.textContent = '';
+    registerErrorMessage.textContent = '';
+}
+
+// Handle registration form submission
+registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(registerForm);
+    const username = formData.get('username');
+    const password = formData.get('password');
+    const confirmPassword = formData.get('confirmPassword');
+    
+    // Validate password confirmation
+    if (password !== confirmPassword) {
+        registerErrorMessage.textContent = 'Passwords do not match';
+        return;
+    }
+    
+    // Show loading state
+    const submitBtn = registerForm.querySelector('.register-btn');
+    submitBtn.textContent = 'Creating Account...';
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Show success message and switch to login
+            registerErrorMessage.textContent = '';
+            registerErrorMessage.style.color = '#28a745';
+            registerErrorMessage.textContent = 'Account created successfully! Please sign in.';
+            
+            // Clear form
+            registerForm.reset();
+            
+            // Switch to login after 2 seconds
+            setTimeout(() => {
+                showLogin();
+                registerErrorMessage.textContent = '';
+                registerErrorMessage.style.color = '#dc3545';
+            }, 2000);
+        } else {
+            // Show error message
+            registerErrorMessage.textContent = data.message || 'Registration failed. Please try again.';
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+        registerErrorMessage.textContent = 'Network error. Please check your connection.';
+    } finally {
+        // Reset button state
+        submitBtn.textContent = 'Create Account';
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+    }
+});
+
+// Handle show register button
+showRegisterBtn.addEventListener('click', () => {
+    showRegister();
+    loginForm.reset();
+});
+
+// Handle show login button
+showLoginBtn.addEventListener('click', () => {
+    showLogin();
+    registerForm.reset();
 });
 
 // Initialize app

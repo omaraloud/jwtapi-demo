@@ -1,31 +1,71 @@
 # JWT Authentication API Documentation
 
 ## Overview
+A secure JWT-based authentication system with comprehensive rate limiting protection and security headers against brute force attacks, API abuse, and common web vulnerabilities.
 
-The JWT Authentication API provides secure authentication and authorization using JSON Web Tokens (JWT). This API allows users to authenticate, access protected resources, and manage their sessions.
-
-## Base URL
-
+## Base URLs
 - **Development:** `http://localhost:3000`
-- **Production:** `https://your-production-domain.com`
+- **API Base:** `http://localhost:3000`
 
 ## Interactive Documentation
-
-Access the interactive Swagger documentation at:
-- **Swagger UI:** `http://localhost:3000/api-docs`
-- **Alternative URL:** `http://localhost:3000/docs`
+- **Swagger UI:** http://localhost:3000/api-docs
+- **Alternative URL:** http://localhost:3000/docs
 
 ## Authentication
-
-This API uses **Bearer Token** authentication. Include your JWT token in the Authorization header:
-
+This API uses JWT (JSON Web Tokens) for authentication. Include the token in the Authorization header:
 ```
 Authorization: Bearer <your-jwt-token>
 ```
 
-## Test Users
+## Security Features
 
-The following test users are available for development:
+### Rate Limiting
+The API implements multiple layers of rate limiting for security:
+
+#### Login Endpoint
+- **Limit:** 5 attempts per 15 minutes per IP
+- **Purpose:** Prevent brute force attacks on login
+- **Response:** 429 Too Many Requests with retry information
+
+#### General API Endpoints
+- **Limit:** 100 requests per 15 minutes per IP
+- **Purpose:** Prevent API abuse and DoS attacks
+- **Response:** 429 Too Many Requests with retry information
+
+#### Protected Endpoints
+- **Limit:** 10 requests per hour per IP
+- **Purpose:** Protect sensitive authenticated resources
+- **Response:** 429 Too Many Requests with retry information
+
+#### Rate Limit Headers
+The API returns rate limit information in response headers:
+- `RateLimit-Limit`: Maximum requests allowed
+- `RateLimit-Remaining`: Remaining requests in current window
+- `RateLimit-Reset`: Time when the rate limit resets (Unix timestamp)
+
+### Security Headers (Helmet.js)
+The API implements comprehensive security headers:
+
+#### Content Security Policy (CSP)
+- **defaultSrc:** `'self'` - Only allow resources from same origin
+- **styleSrc:** `'self'`, `'unsafe-inline'`, `https://fonts.googleapis.com` - Allow inline styles and Google Fonts
+- **fontSrc:** `'self'`, `https://fonts.gstatic.com` - Allow Google Fonts
+- **scriptSrc:** `'self'` - Only allow scripts from same origin
+- **imgSrc:** `'self'`, `data:`, `https:` - Allow images from same origin, data URIs, and HTTPS
+- **connectSrc:** `'self'` - Only allow connections to same origin
+- **frameSrc:** `'none'` - Block all frames (XSS protection)
+- **objectSrc:** `'none'` - Block all objects (XSS protection)
+
+#### Additional Security Headers
+- **X-Content-Type-Options:** `nosniff` - Prevent MIME type sniffing
+- **X-Frame-Options:** `DENY` - Prevent clickjacking attacks
+- **X-XSS-Protection:** `1; mode=block` - Enable XSS protection
+- **Strict-Transport-Security:** `max-age=31536000; includeSubDomains` - Force HTTPS
+- **Referrer-Policy:** `strict-origin-when-cross-origin` - Control referrer information
+- **Permissions-Policy:** Various restrictions on browser features
+
+## Test Users
+Use these credentials for testing:
 
 | Username | Password | Description |
 |----------|----------|-------------|
@@ -37,11 +77,10 @@ The following test users are available for development:
 
 ### Authentication Endpoints
 
-#### 1. Login User
+#### POST /auth/login
+Authenticate user and receive JWT token.
 
-**POST** `/auth/login`
-
-Authenticate a user and receive a JWT token.
+**Rate Limited:** 5 attempts per 15 minutes per IP
 
 **Request Body:**
 ```json
@@ -51,7 +90,7 @@ Authenticate a user and receive a JWT token.
 }
 ```
 
-**Response (200):**
+**Success Response (200):**
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -63,22 +102,20 @@ Authenticate a user and receive a JWT token.
 ```
 
 **Error Responses:**
-- **400** - Missing username or password
-- **401** - Invalid credentials
-- **500** - Internal server error
+- **400 Bad Request:** Missing username or password
+- **401 Unauthorized:** Invalid credentials
+- **429 Too Many Requests:** Rate limit exceeded
+- **500 Internal Server Error:** Server error
 
-**Example with curl:**
+**cURL Example:**
 ```bash
 curl -X POST http://localhost:3000/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "admin123"}'
 ```
 
-#### 2. Get Available Users
-
-**GET** `/auth/users`
-
-Get a list of available test users.
+#### GET /auth/users
+Get list of available test users.
 
 **Response (200):**
 ```json
@@ -89,7 +126,7 @@ Get a list of available test users.
       "description": "admin account"
     },
     {
-      "username": "user",
+      "username": "user", 
       "description": "user account"
     },
     {
@@ -102,20 +139,17 @@ Get a list of available test users.
 
 ### Protected Endpoints
 
-All protected endpoints require a valid JWT token in the Authorization header.
+All protected endpoints require JWT authentication and are rate limited to 10 requests per hour per IP.
 
-#### 1. Get User Profile
+#### GET /protected
+Access protected user profile.
 
-**GET** `/protected`
-
-Access the user's basic profile information.
-
-**Headers:**
+**Headers Required:**
 ```
-Authorization: Bearer <your-jwt-token>
+Authorization: Bearer <jwt-token>
 ```
 
-**Response (200):**
+**Success Response (200):**
 ```json
 {
   "message": "Hello, admin! This is your profile."
@@ -123,27 +157,25 @@ Authorization: Bearer <your-jwt-token>
 ```
 
 **Error Responses:**
-- **401** - No token provided
-- **403** - Invalid or expired token
+- **401 Unauthorized:** No token provided
+- **403 Forbidden:** Invalid or expired token
+- **429 Too Many Requests:** Rate limit exceeded
 
-**Example with curl:**
+**cURL Example:**
 ```bash
 curl -X GET http://localhost:3000/protected \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 ```
 
-#### 2. Get Detailed Profile
+#### GET /protected/profile
+Get detailed user profile information.
 
-**GET** `/protected/profile`
-
-Get detailed user profile including token information.
-
-**Headers:**
+**Headers Required:**
 ```
-Authorization: Bearer <your-jwt-token>
+Authorization: Bearer <jwt-token>
 ```
 
-**Response (200):**
+**Success Response (200):**
 ```json
 {
   "user": {
@@ -155,18 +187,15 @@ Authorization: Bearer <your-jwt-token>
 }
 ```
 
-#### 3. Validate Token
+#### POST /protected/validate
+Validate JWT token.
 
-**POST** `/protected/validate`
-
-Check if the provided JWT token is valid and not expired.
-
-**Headers:**
+**Headers Required:**
 ```
-Authorization: Bearer <your-jwt-token>
+Authorization: Bearer <jwt-token>
 ```
 
-**Response (200):**
+**Success Response (200):**
 ```json
 {
   "valid": true,
@@ -178,30 +207,13 @@ Authorization: Bearer <your-jwt-token>
 ```
 
 ## JWT Token Details
-
-### Token Structure
-
-JWT tokens consist of three parts separated by dots:
-```
-header.payload.signature
-```
-
-### Token Payload
-
-The JWT payload contains:
-- `username`: User's username
-- `iat`: Token issued at timestamp
-- `exp`: Token expiration timestamp (1 hour from creation)
-
-### Token Expiration
-
-- **Default expiration:** 1 hour
-- **Format:** Unix timestamp
-- **Timezone:** UTC
+- **Algorithm:** HS256
+- **Expiration:** 1 hour from creation
+- **Payload:** Contains username and timestamps
+- **Secret:** Configured via JWT_SECRET environment variable
 
 ## Error Handling
-
-### Standard Error Response Format
+All endpoints return consistent error responses:
 
 ```json
 {
@@ -209,51 +221,31 @@ The JWT payload contains:
 }
 ```
 
-### HTTP Status Codes
-
-| Code | Description |
-|------|-------------|
-| 200 | Success |
-| 400 | Bad Request - Invalid input |
-| 401 | Unauthorized - No token or invalid credentials |
-| 403 | Forbidden - Invalid or expired token |
-| 404 | Not Found |
-| 500 | Internal Server Error |
-
-## Rate Limiting
-
-Currently, no rate limiting is implemented. Consider implementing rate limiting for production use.
+Common HTTP status codes:
+- **200:** Success
+- **400:** Bad Request (missing/invalid parameters)
+- **401:** Unauthorized (no token)
+- **403:** Forbidden (invalid token)
+- **429:** Too Many Requests (rate limit exceeded)
+- **500:** Internal Server Error
 
 ## Security Considerations
-
-### Production Recommendations
-
-1. **Use HTTPS** in production
-2. **Implement rate limiting** to prevent brute force attacks
-3. **Use strong JWT secrets** (at least 32 characters)
-4. **Implement token refresh** mechanism
-5. **Add password hashing** with bcrypt
-6. **Use secure session management**
-7. **Implement CORS** properly
-8. **Add input validation** and sanitization
-
-### JWT Security Best Practices
-
-1. **Keep tokens short-lived** (1 hour or less)
-2. **Store tokens securely** (HttpOnly cookies for web apps)
-3. **Validate tokens** on every request
-4. **Use HTTPS** to transmit tokens
-5. **Implement token blacklisting** for logout
+1. **Rate Limiting:** Multiple layers prevent abuse
+2. **Security Headers:** Comprehensive protection against common attacks
+3. **Content Security Policy:** Prevents XSS and injection attacks
+4. **JWT Expiration:** Tokens expire after 1 hour
+5. **HTTPS:** Use HTTPS in production
+6. **Environment Variables:** Store secrets securely
+7. **Input Validation:** All inputs are validated
+8. **CORS:** Configure CORS for production
 
 ## Development Setup
 
 ### Prerequisites
-
 - Node.js 18+
 - npm or yarn
 
 ### Installation
-
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -262,76 +254,67 @@ cd jwtapi-demo
 # Install dependencies
 npm install
 
-# Set up environment variables
+# Create environment file
 cp .env.example .env
-# Edit .env with your JWT_SECRET
 
-# Start the server
-npm start
+# Edit .env file with your JWT secret
+echo "JWT_SECRET=your-super-secret-jwt-key-change-this-in-production" > .env
+echo "PORT=3000" >> .env
+
+# Start development server
+npm run dev
 ```
 
-### Environment Variables
+### Docker Setup
+```bash
+# Development with hot reload
+docker-compose -f docker-compose.dev.yml up
 
-Create a `.env` file in the root directory:
-
-```env
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-PORT=3000
-NODE_ENV=development
+# Production
+docker-compose up -d
 ```
 
 ## Testing
+Test the API using:
+- **Postman:** Import the endpoints
+- **cURL:** Use the provided examples
+- **Swagger UI:** Interactive testing at `/api-docs`
+- **Frontend:** Visit `http://localhost:3000`
 
-### Using curl
-
+## Security Testing
+### Rate Limiting Test
 ```bash
-# Login
-TOKEN=$(curl -s -X POST http://localhost:3000/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username": "admin", "password": "admin123"}' | jq -r '.token')
-
-# Use token for protected requests
-curl -X GET http://localhost:3000/protected \
-  -H "Authorization: Bearer $TOKEN"
+# Test login rate limiting
+for i in {1..6}; do 
+  curl -X POST http://localhost:3000/auth/login \
+    -H "Content-Type: application/json" \
+    -d '{"username":"wrong","password":"wrong"}' \
+    -w "\nHTTP Status: %{http_code}\n" -s
+  echo "---"
+done
 ```
 
-### Using Postman
-
-1. Import the API collection
-2. Set up environment variables
-3. Use the provided examples in the Swagger documentation
-
-## Docker Support
-
-### Run with Docker
-
+### Security Headers Test
 ```bash
-# Build and run
-docker-compose up --build
-
-# Or run in background
-docker-compose up -d --build
+# Check security headers
+curl -I http://localhost:3000 | grep -E "(X-|Content-Security-Policy|Strict-Transport-Security)"
 ```
 
-### Development with Docker
+## Deployment
+1. Set production environment variables
+2. Use Docker for containerized deployment
+3. Configure reverse proxy (nginx)
+4. Enable HTTPS
+5. Set up monitoring and logging
+6. Configure proper CORS settings
+7. Review and adjust CSP policies for production
 
-```bash
-# Run with hot reload
-docker-compose -f docker-compose.dev.yml up --build
-```
+## Rate Limiting Testing
+To test rate limiting:
+1. Make multiple rapid requests to `/auth/login`
+2. After 5 failed attempts, you'll get a 429 response
+3. Wait 15 minutes or use a different IP
+4. Protected endpoints have stricter limits (10/hour)
 
 ## Support
-
-For API support and questions:
-- **Email:** support@jwtapi-demo.com
-- **Documentation:** http://localhost:3000/api-docs
-- **GitHub Issues:** [Repository Issues](https://github.com/your-repo/issues)
-
-## License
-
-This project is licensed under the ISC License.
-
----
-
-**Last Updated:** July 2024  
-**API Version:** 1.0.0 
+For API support, contact: support@example.com 

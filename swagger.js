@@ -6,24 +6,20 @@ const options = {
     info: {
       title: 'JWT Authentication API',
       version: '1.0.0',
-      description: 'A modern JWT authentication system with secure token management',
+      description: 'A secure JWT-based authentication system with rate limiting protection',
       contact: {
         name: 'API Support',
-        email: 'support@jwtapi-demo.com'
+        email: 'support@example.com'
       },
       license: {
-        name: 'ISC',
-        url: 'https://opensource.org/licenses/ISC'
+        name: 'MIT',
+        url: 'https://opensource.org/licenses/MIT'
       }
     },
     servers: [
       {
         url: 'http://localhost:3000',
         description: 'Development server'
-      },
-      {
-        url: 'https://your-production-domain.com',
-        description: 'Production server'
       }
     ],
     components: {
@@ -77,6 +73,16 @@ const options = {
             }
           }
         },
+        ProtectedResponse: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              description: 'Protected resource message',
+              example: 'Hello, admin! This is your profile.'
+            }
+          }
+        },
         ErrorResponse: {
           type: 'object',
           properties: {
@@ -87,13 +93,18 @@ const options = {
             }
           }
         },
-        ProtectedResponse: {
+        RateLimitResponse: {
           type: 'object',
           properties: {
             message: {
               type: 'string',
-              description: 'Success message with user info',
-              example: 'Hello, admin! This is your profile.'
+              description: 'Rate limit error message',
+              example: 'Too many requests from this IP, please try again after 15 minutes'
+            },
+            retryAfter: {
+              type: 'number',
+              description: 'Minutes to wait before retrying',
+              example: 15
             }
           }
         }
@@ -102,15 +113,20 @@ const options = {
     tags: [
       {
         name: 'Authentication',
-        description: 'Authentication endpoints'
+        description: 'Authentication endpoints for login and user management'
       },
       {
         name: 'Protected',
-        description: 'Protected routes requiring authentication'
+        description: 'Protected endpoints requiring JWT authentication'
+      }
+    ],
+    security: [
+      {
+        bearerAuth: []
       }
     ]
   },
-  apis: ['./routes/*.js', './server.js'], // Path to the API docs
+  apis: ['./routes/*.js', './server.js']
 };
 
 const specs = swaggerJsdoc(options);

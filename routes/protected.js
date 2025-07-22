@@ -1,5 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const { logAuth, logSecurity } = require('../logger');
 const router = express.Router();
 
 /**
@@ -51,13 +52,28 @@ const router = express.Router();
 router.get('/', (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
+  const ip = req.ip || req.connection.remoteAddress;
 
-  if (!token) return res.sendStatus(401);
+  if (!token) {
+    logSecurity('No token provided', {
+      endpoint: '/protected',
+      ip,
+      userAgent: req.get('User-Agent')
+    });
+    return res.sendStatus(401);
+  }
 
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
+    logAuth(user.username, 'profile_access', ip, true);
     res.json({ message: `Hello, ${user.username}! This is your profile.` });
-  } catch {
+  } catch (error) {
+    logSecurity('Invalid token', {
+      endpoint: '/protected',
+      ip,
+      userAgent: req.get('User-Agent'),
+      error: error.message
+    });
     res.sendStatus(403);
   }
 });
@@ -108,16 +124,31 @@ router.get('/', (req, res) => {
 router.get('/profile', (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
+  const ip = req.ip || req.connection.remoteAddress;
 
-  if (!token) return res.sendStatus(401);
+  if (!token) {
+    logSecurity('No token provided', {
+      endpoint: '/protected/profile',
+      ip,
+      userAgent: req.get('User-Agent')
+    });
+    return res.sendStatus(401);
+  }
 
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
+    logAuth(user.username, 'detailed_profile_access', ip, true);
     res.json({ 
       user: user,
       message: 'Profile retrieved successfully'
     });
-  } catch {
+  } catch (error) {
+    logSecurity('Invalid token', {
+      endpoint: '/protected/profile',
+      ip,
+      userAgent: req.get('User-Agent'),
+      error: error.message
+    });
     res.sendStatus(403);
   }
 });
@@ -163,17 +194,32 @@ router.get('/profile', (req, res) => {
 router.post('/validate', (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
+  const ip = req.ip || req.connection.remoteAddress;
 
-  if (!token) return res.sendStatus(401);
+  if (!token) {
+    logSecurity('No token provided', {
+      endpoint: '/protected/validate',
+      ip,
+      userAgent: req.get('User-Agent')
+    });
+    return res.sendStatus(401);
+  }
 
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
+    logAuth(user.username, 'token_validation', ip, true);
     res.json({ 
       valid: true,
       message: 'Token is valid',
       user: { username: user.username }
     });
-  } catch {
+  } catch (error) {
+    logSecurity('Invalid token', {
+      endpoint: '/protected/validate',
+      ip,
+      userAgent: req.get('User-Agent'),
+      error: error.message
+    });
     res.sendStatus(403);
   }
 });

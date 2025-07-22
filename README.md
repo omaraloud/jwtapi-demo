@@ -1,58 +1,73 @@
-# JWT Authentication System
+# JWT Authentication API
 
-A modern, production-ready JWT authentication system with a beautiful dark-themed frontend and comprehensive backend API.
+A secure, production-ready JWT authentication system with comprehensive security features, logging, and CI/CD pipeline.
 
-![JWT Auth Demo](https://img.shields.io/badge/JWT-Authentication-blue)
-![Node.js](https://img.shields.io/badge/Node.js-18+-green)
-![Docker](https://img.shields.io/badge/Docker-Ready-blue)
-![Swagger](https://img.shields.io/badge/Swagger-Documented-orange)
+## 🚀 Features
 
-## ✨ Features
+- **🔐 JWT Authentication** - Secure token-based authentication
+- **🛡️ Security** - Rate limiting, security headers, CSP protection
+- **📊 Logging** - Comprehensive logging with Winston and Morgan
+- **🐳 Docker** - Containerized for easy deployment
+- **📚 Documentation** - Interactive API documentation with Swagger
+- **🔄 CI/CD** - Automated testing, building, and deployment
+- **🎨 Modern UI** - Beautiful dark-themed frontend
 
-- 🔐 **JWT Authentication** - Secure token-based authentication
-- 🎨 **Modern Dark UI** - Beautiful glassmorphism design
-- 🐳 **Docker Ready** - Easy deployment with containers
-- 📚 **Interactive API Docs** - Swagger/OpenAPI documentation
-- 📱 **Responsive Design** - Works on all devices
-- 🔒 **Security First** - Industry-standard security practices
+## 🏗️ Architecture
+
+```
+jwtapi-demo/
+├── server.js              # Main server with security middleware
+├── logger.js              # Winston logging configuration
+├── view-logs.js           # Log viewer utility
+├── routes/
+│   ├── auth.js           # Authentication routes
+│   └── protected.js      # Protected routes
+├── public/               # Frontend files
+├── logs/                 # Log files directory
+├── .github/workflows/    # CI/CD workflows
+├── Dockerfile            # Production container
+├── docker-compose.yml    # Production orchestration
+└── docs/                 # Documentation
+```
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ or Docker
-- npm or yarn
+- Node.js 18+
+- Docker (optional)
+- Git
 
 ### Local Development
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/jwtapi-demo.git
+git clone <your-repo-url>
 cd jwtapi-demo
 
 # Install dependencies
 npm install
 
-# Set up environment variables
+# Set up environment
 cp .env.example .env
 # Edit .env with your JWT_SECRET
 
-# Start the server
-npm start
+# Start development server
+npm run dev
 ```
 
-### Docker Deployment
+### Docker Development
 ```bash
-# Build and run with Docker
-docker-compose up --build
+# Development with hot reload
+docker-compose -f docker-compose.dev.yml up
 
-# Or run in background
-docker-compose up -d --build
+# Production
+docker-compose up -d
 ```
 
-## 🌐 Access Points
+## 🔗 URLs
 
 - **Frontend:** http://localhost:3000
 - **API Documentation:** http://localhost:3000/api-docs
-- **Alternative Docs:** http://localhost:3000/docs
+- **Docs Redirect:** http://localhost:3000/docs
 
 ## 🔐 Test Users
 
@@ -62,164 +77,207 @@ docker-compose up -d --build
 | `user`   | `password123` | Regular user account |
 | `demo`   | `demo123` | Demo account |
 
-## 📡 API Endpoints
+## 📊 Logging
 
-### Authentication
-- `POST /auth/login` - User authentication
-- `GET /auth/users` - Available test users
-
-### Protected Routes
-- `GET /protected` - Basic user profile
-- `GET /protected/profile` - Detailed profile with token info
-- `POST /protected/validate` - Token validation
-
-### Documentation
-- `GET /api-docs` - Interactive Swagger UI
-- `GET /docs` - Documentation redirect
-
-## 🛠️ Tech Stack
-
-### Backend
-- **Node.js** - JavaScript runtime
-- **Express.js** - Web framework
-- **JWT** - JSON Web Tokens
-- **Swagger** - API documentation
-
-### Frontend
-- **HTML5** - Semantic markup
-- **CSS3** - Modern styling with animations
-- **JavaScript (ES6+)** - Interactive functionality
-
-### DevOps
-- **Docker** - Containerization
-- **Docker Compose** - Multi-container orchestration
-- **Alpine Linux** - Lightweight base images
-
-## 📁 Project Structure
-
-```
-jwtapi-demo/
-├── public/                 # Frontend files
-│   ├── index.html         # Main application page
-│   ├── styles.css         # Modern dark theme styles
-│   └── script.js          # Frontend JavaScript
-├── routes/                # API routes
-│   ├── auth.js           # Authentication endpoints
-│   └── protected.js      # Protected routes
-├── server.js             # Express server setup
-├── swagger.js            # API documentation config
-├── Dockerfile            # Production Docker config
-├── Dockerfile.dev        # Development Docker config
-├── docker-compose.yml    # Production Docker Compose
-├── docker-compose.dev.yml # Development Docker Compose
-├── package.json          # Dependencies and scripts
-├── .env                  # Environment variables
-└── README.md            # This file
-```
-
-## 🔧 Development
-
-### Available Scripts
+### View Logs
 ```bash
-npm start          # Start production server
-npm run dev        # Start development server with hot reload
+# Using the log viewer script
+node view-logs.js combined 20
+node view-logs.js error 10
+node view-logs.js debug 30 "admin"
+
+# Direct file access
+tail -f logs/combined.log
+grep "login_success" logs/combined.log
 ```
 
-### Environment Variables
-Create a `.env` file in the root directory:
-```env
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-PORT=3000
-NODE_ENV=development
+### Log Files
+- `logs/combined.log` - All logs (info level and above)
+- `logs/error.log` - Error logs only
+- `logs/debug.log` - Debug logs (most detailed)
+
+## 🔄 CI/CD Pipeline
+
+### Workflows
+
+#### 1. **Main CI/CD Pipeline** (`.github/workflows/ci-cd.yml`)
+- **Triggers:** Push to main/develop, PRs, releases
+- **Jobs:**
+  - ✅ **Test & Lint** - Code quality checks
+  - 🔒 **Security Scan** - Vulnerability scanning with Trivy
+  - 🐳 **Build** - Docker image building and pushing
+  - 🚀 **Deploy Staging** - Automatic staging deployment
+  - 🌐 **Deploy Production** - Production deployment
+  - 📦 **Release** - GitHub release creation
+
+#### 2. **Development Workflow** (`.github/workflows/development.yml`)
+- **Triggers:** Feature branches, PRs
+- **Jobs:**
+  - ✅ **Code Quality** - Syntax checks, security audit
+  - 🐳 **Build Test** - Docker build validation
+  - 📚 **Documentation** - Doc file validation
+  - 🔒 **Security Check** - Sensitive file validation
+
+#### 3. **Deployment Workflow** (`.github/workflows/deploy.yml`)
+- **Triggers:** Manual deployment, tags
+- **Features:**
+  - 🎯 **Environment Selection** - Choose staging/production
+  - 🔄 **Auto-deployment** - Based on branch
+  - 🏥 **Health Checks** - Post-deployment validation
+
+### Pipeline Stages
+
+```mermaid
+graph LR
+    A[Code Push] --> B[Test & Lint]
+    B --> C[Security Scan]
+    C --> D[Build Docker Image]
+    D --> E[Deploy Staging]
+    E --> F[Deploy Production]
+    F --> G[Create Release]
 ```
 
-## 🐳 Docker Commands
+### Branch Strategy
+
+- **`main`** → Production deployment
+- **`develop`** → Staging deployment
+- **`feature/*`** → Development workflow only
+- **`v*` tags** → Release creation
+
+## 🛠️ Setup CI/CD
+
+### 1. GitHub Repository Setup
 
 ```bash
-# Development with hot reload
-docker-compose -f docker-compose.dev.yml up --build
+# Initialize git (if not already done)
+git init
+git add .
+git commit -m "Initial commit with CI/CD"
 
-# Production deployment
-docker-compose up --build -d
-
-# View logs
-docker-compose logs -f
-
-# Stop containers
-docker-compose down
+# Create repository on GitHub
+# Then push your code
+git remote add origin <your-github-repo-url>
+git push -u origin main
 ```
 
-## 🧪 Testing
+### 2. GitHub Secrets (Optional)
 
-### API Testing with curl
+For advanced deployments, add these secrets in your GitHub repository:
+
+- `DOCKER_USERNAME` - Docker Hub username
+- `DOCKER_PASSWORD` - Docker Hub password
+- `SLACK_WEBHOOK_URL` - Slack notifications
+- `DEPLOY_SSH_KEY` - SSH key for server deployment
+- `DEPLOY_HOST` - Deployment server hostname
+
+### 3. Environment Protection
+
+Set up environment protection rules in GitHub:
+- **Staging:** Require PR approval
+- **Production:** Require PR approval + status checks
+
+## 🚀 Deployment Options
+
+### 1. **Docker Compose** (Recommended for small projects)
 ```bash
-# Login
-curl -X POST http://localhost:3000/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username": "admin", "password": "admin123"}'
+# Production
+docker-compose up -d
 
-# Use token for protected requests
-curl -X GET http://localhost:3000/protected \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+# Staging
+docker-compose -f docker-compose.staging.yml up -d
 ```
 
-### Interactive Testing
-Visit http://localhost:3000/api-docs for interactive API testing with Swagger UI.
+### 2. **Kubernetes** (For larger projects)
+```bash
+# Apply Kubernetes manifests
+kubectl apply -f k8s/
+```
 
-## 🚀 Deployment
-
-### Cloud Platforms
-This Docker setup works with:
+### 3. **Cloud Platforms**
 - **AWS ECS/Fargate**
 - **Google Cloud Run**
 - **Azure Container Instances**
 - **DigitalOcean App Platform**
-- **Heroku Container Registry**
 
-### Example: Deploy to DigitalOcean
+## 📈 Monitoring & Observability
+
+### Health Checks
 ```bash
-# Tag your image
-docker tag jwt-app registry.digitalocean.com/your-registry/jwt-app
+# Application health
+curl http://localhost:3000/health
 
-# Push to registry
-docker push registry.digitalocean.com/your-registry/jwt-app
+# Docker health
+docker ps --format "table {{.Names}}\t{{.Status}}"
 ```
+
+### Metrics
+- **Response Times** - Logged automatically
+- **Error Rates** - Tracked in error.log
+- **Authentication Events** - Security monitoring
+- **Rate Limiting** - Abuse detection
+
+## 🔧 Configuration
+
+### Environment Variables
+```bash
+# Required
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+PORT=3000
+
+# Optional
+NODE_ENV=production
+LOG_LEVEL=info
+```
+
+### Docker Configuration
+```bash
+# Production
+docker-compose up -d
+
+# Development
+docker-compose -f docker-compose.dev.yml up
+
+# Custom environment
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+```
+
+## 🧪 Testing
+
+### Manual Testing
+```bash
+# Test authentication
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin123"}'
+
+# Test protected endpoint
+curl -X GET http://localhost:3000/protected \
+  -H "Authorization: Bearer <your-token>"
+```
+
+### Automated Testing (Future)
+```bash
+# Run tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+```
+
+## 📚 API Documentation
+
+- **Interactive Docs:** http://localhost:3000/api-docs
+- **API Reference:** [API_DOCUMENTATION.md](API_DOCUMENTATION.md)
+- **Project Notes:** [PROJECT_NOTES.md](PROJECT_NOTES.md)
 
 ## 🔒 Security Features
 
-- **JWT Token Expiration** (1 hour)
-- **Secure Token Storage** (HttpOnly cookies ready)
-- **Input Validation** (Request sanitization)
-- **Error Handling** (Secure error responses)
-- **CORS Support** (Cross-origin resource sharing)
-
-## 🎨 UI Features
-
-- **Dark Theme** with glassmorphism effects
-- **Animated Background** with floating particles
-- **Responsive Design** for all screen sizes
-- **Smooth Animations** and hover effects
-- **Modern Typography** with Inter font
-- **Token Display** with copy functionality
-
-## 📈 Performance
-
-- **Efficient Token Validation** - Fast JWT verification
-- **Minimal Dependencies** - Lightweight production build
-- **Optimized Docker Images** - Alpine Linux base
-- **Static File Serving** - Efficient frontend delivery
-- **Caching Ready** - HTTP caching headers
-
-## 🔮 Future Enhancements
-
-- [ ] Password hashing with bcrypt
-- [ ] User registration system
-- [ ] Email verification
-- [ ] Password reset functionality
-- [ ] Two-factor authentication (2FA)
-- [ ] Database integration (MongoDB/PostgreSQL)
-- [ ] Rate limiting
-- [ ] Real-time features (WebSocket)
+- ✅ **Rate Limiting** - 3 layers of protection
+- ✅ **Security Headers** - Helmet.js protection
+- ✅ **Content Security Policy** - XSS prevention
+- ✅ **JWT Expiration** - 1-hour token lifetime
+- ✅ **Input Validation** - All inputs validated
+- ✅ **Logging** - Security event tracking
 
 ## 🤝 Contributing
 
@@ -231,18 +289,15 @@ docker push registry.digitalocean.com/your-registry/jwt-app
 
 ## 📄 License
 
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## 🆘 Support
 
-- [Express.js](https://expressjs.com/) - Web framework
-- [JWT](https://jwt.io/) - JSON Web Tokens
-- [Swagger](https://swagger.io/) - API documentation
-- [Docker](https://www.docker.com/) - Containerization
+- **Documentation:** Check the docs folder
+- **Issues:** Create a GitHub issue
+- **Discussions:** Use GitHub Discussions
 
 ---
 
-**Built with ❤️ using modern web technologies**
-
-⭐ **Star this repository if you found it helpful!**
+**Built with ❤️ using Node.js, Express, and modern DevOps practices**
 

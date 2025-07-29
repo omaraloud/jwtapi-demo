@@ -1,3 +1,4 @@
+README made using AI, checked for accuracy
 # JWT Authentication API
 
 A secure, production-ready JWT authentication system with comprehensive security features, logging, and CI/CD pipeline.

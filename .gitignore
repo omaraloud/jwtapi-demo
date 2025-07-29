@@ -44,6 +44,9 @@ jspm_packages/
 # dotenv environment variables file
 .env
 
+# Project notes (excluded from public repo)
+PROJECT_NOTES.md
+
 # IDE files
 .vscode/
 .idea/

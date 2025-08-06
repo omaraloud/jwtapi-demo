@@ -15,6 +15,12 @@ on:
         - staging
         - production
 
+# Add permissions to fix GitHub Container Registry access
+permissions:
+  contents: read
+  packages: write
+  actions: read
+
 env:
   NODE_VERSION: '18'
   DOCKER_IMAGE: jwt-auth-api

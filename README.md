@@ -3,17 +3,17 @@ README made using AI, checked for accuracy
 
 A secure, production-ready JWT authentication system with comprehensive security features, logging, and CI/CD pipeline.
 
-## 🚀 Features
+## Features
 
-- **🔐 JWT Authentication** - Secure token-based authentication
-- **🛡️ Security** - Rate limiting, security headers, CSP protection
-- **📊 Logging** - Comprehensive logging with Winston and Morgan
-- **🐳 Docker** - Containerized for easy deployment
-- **📚 Documentation** - Interactive API documentation with Swagger
-- **🔄 CI/CD** - Automated testing, building, and deployment
-- **🎨 Modern UI** - Beautiful dark-themed frontend
+- **JWT Authentication** - Secure token-based authentication
+- **Security** - Rate limiting, security headers, CSP protection
+- **Logging** - Comprehensive logging with Winston and Morgan
+- **Docker** - Containerized for easy deployment
+- **Documentation** - Interactive API documentation with Swagger
+- **CI/CD** - Automated testing, building, and deployment
+- **Modern UI** - Beautiful dark-themed frontend
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 jwtapi-demo/
@@ -31,7 +31,7 @@ jwtapi-demo/
 └── docs/                 # Documentation
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 18+
@@ -64,13 +64,13 @@ docker-compose -f docker-compose.dev.yml up
 docker-compose up -d
 ```
 
-## 🔗 URLs
+## URLs
 
 - **Frontend:** http://localhost:3000
 - **API Documentation:** http://localhost:3000/api-docs
 - **Docs Redirect:** http://localhost:3000/docs
 
-## 🔐 Test Users
+## Test Users
 
 | Username | Password | Description |
 |----------|----------|-------------|
@@ -78,7 +78,7 @@ docker-compose up -d
 | `user`   | `password123` | Regular user account |
 | `demo`   | `demo123` | Demo account |
 
-## 📊 Logging
+## Logging
 
 ### View Logs
 ```bash
@@ -97,34 +97,34 @@ grep "login_success" logs/combined.log
 - `logs/error.log` - Error logs only
 - `logs/debug.log` - Debug logs (most detailed)
 
-## 🔄 CI/CD Pipeline
+## CI/CD Pipeline
 
 ### Workflows
 
 #### 1. **Main CI/CD Pipeline** (`.github/workflows/ci-cd.yml`)
 - **Triggers:** Push to main/develop, PRs, releases
 - **Jobs:**
-  - ✅ **Test & Lint** - Code quality checks
-  - 🔒 **Security Scan** - Vulnerability scanning with Trivy
-  - 🐳 **Build** - Docker image building and pushing
-  - 🚀 **Deploy Staging** - Automatic staging deployment
-  - 🌐 **Deploy Production** - Production deployment
-  - 📦 **Release** - GitHub release creation
+  - **Test & Lint** - Code quality checks
+  - **Security Scan** - Vulnerability scanning with Trivy
+  - **Build** - Docker image building and pushing
+  - **Deploy Staging** - Automatic staging deployment
+  - **Deploy Production** - Production deployment
+  - **Release** - GitHub release creation
 
 #### 2. **Development Workflow** (`.github/workflows/development.yml`)
 - **Triggers:** Feature branches, PRs
 - **Jobs:**
-  - ✅ **Code Quality** - Syntax checks, security audit
-  - 🐳 **Build Test** - Docker build validation
-  - 📚 **Documentation** - Doc file validation
-  - 🔒 **Security Check** - Sensitive file validation
+  - **Code Quality** - Syntax checks, security audit
+  - **Build Test** - Docker build validation
+  - **Documentation** - Doc file validation
+  - **Security Check** - Sensitive file validation
 
 #### 3. **Deployment Workflow** (`.github/workflows/deploy.yml`)
 - **Triggers:** Manual deployment, tags
 - **Features:**
-  - 🎯 **Environment Selection** - Choose staging/production
-  - 🔄 **Auto-deployment** - Based on branch
-  - 🏥 **Health Checks** - Post-deployment validation
+  - **Environment Selection** - Choose staging/production
+  - **Auto-deployment** - Based on branch
+  - **Health Checks** - Post-deployment validation
 
 ### Pipeline Stages
 
@@ -145,7 +145,7 @@ graph LR
 - **`feature/*`** → Development workflow only
 - **`v*` tags** → Release creation
 
-## 🛠️ Setup CI/CD
+## Setup CI/CD
 
 ### 1. GitHub Repository Setup
 
@@ -177,7 +177,7 @@ Set up environment protection rules in GitHub:
 - **Staging:** Require PR approval
 - **Production:** Require PR approval + status checks
 
-## 🚀 Deployment Options
+## Deployment Options
 
 ### 1. **Docker Compose** (Recommended for small projects)
 ```bash
@@ -200,7 +200,7 @@ kubectl apply -f k8s/
 - **Azure Container Instances**
 - **DigitalOcean App Platform**
 
-## 📈 Monitoring & Observability
+## Monitoring & Observability
 
 ### Health Checks
 ```bash
@@ -217,7 +217,7 @@ docker ps --format "table {{.Names}}\t{{.Status}}"
 - **Authentication Events** - Security monitoring
 - **Rate Limiting** - Abuse detection
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 ```bash
@@ -242,7 +242,7 @@ docker-compose -f docker-compose.dev.yml up
 docker-compose -f docker-compose.yml -f docker-compose.override.yml up
 ```
 
-## 🧪 Testing
+## Testing
 
 ### Manual Testing
 ```bash
@@ -265,22 +265,22 @@ npm test
 npm run test:coverage
 ```
 
-## 📚 API Documentation
+## API Documentation
 
 - **Interactive Docs:** http://localhost:3000/api-docs
 - **API Reference:** [API_DOCUMENTATION.md](API_DOCUMENTATION.md)
 - **Project Notes:** [PROJECT_NOTES.md](PROJECT_NOTES.md)
 
-## 🔒 Security Features
+## Security Features
 
-- ✅ **Rate Limiting** - 3 layers of protection
-- ✅ **Security Headers** - Helmet.js protection
-- ✅ **Content Security Policy** - XSS prevention
-- ✅ **JWT Expiration** - 1-hour token lifetime
-- ✅ **Input Validation** - All inputs validated
-- ✅ **Logging** - Security event tracking
+- **Rate Limiting** - 3 layers of protection
+- **Security Headers** - Helmet.js protection
+- **Content Security Policy** - XSS prevention
+- **JWT Expiration** - 1-hour token lifetime
+- **Input Validation** - All inputs validated
+- **Logging** - Security event tracking
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -288,11 +288,11 @@ npm run test:coverage
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## Support
 
 - **Documentation:** Check the docs folder
 - **Issues:** Create a GitHub issue
@@ -300,5 +300,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ using Node.js, Express, and modern DevOps practices**
+**Built using Node.js, Express, and modern DevOps practices**
 

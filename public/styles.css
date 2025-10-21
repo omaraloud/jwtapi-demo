@@ -9,8 +9,8 @@
     --text-muted: #64748b;
     --border-color: #e2e8f0;
     --shadow-color: rgba(0, 0, 0, 0.1);
-    --accent-color: #667eea;
-    --accent-hover: #5a67d8;
+    --accent-color: #2563eb;
+    --accent-hover: #1d4ed8;
     --error-color: #ef4444;
     --success-color: #10b981;
     --warning-color: #f59e0b;
@@ -28,8 +28,8 @@
     --text-muted: #64748b;
     --border-color: #334155;
     --shadow-color: rgba(0, 0, 0, 0.3);
-    --accent-color: #667eea;
-    --accent-hover: #5a67d8;
+    --accent-color: #2563eb;
+    --accent-hover: #1d4ed8;
     --error-color: #f87171;
     --success-color: #34d399;
     --warning-color: #fbbf24;
@@ -45,7 +45,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+    background: var(--bg-primary);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -56,7 +56,7 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Animated background particles */
+/* Subtle background pattern */
 body::before {
     content: '';
     position: fixed;
@@ -65,23 +65,17 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
-    animation: float 20s ease-in-out infinite;
+        radial-gradient(circle at 20% 80%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(0, 0, 0, 0.01) 0%, transparent 50%);
     z-index: -1;
-    opacity: 0.8;
+    opacity: 0.5;
 }
 
 [data-theme="light"] body::before {
-    opacity: 0.3;
+    opacity: 0.1;
 }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    33% { transform: translateY(-20px) rotate(1deg); }
-    66% { transform: translateY(10px) rotate(-1deg); }
-}
 
 .container {
     width: 100%;
@@ -135,7 +129,7 @@ body::before {
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 12px;
-    background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-color) 0%, #1e40af 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -186,7 +180,7 @@ body::before {
     outline: none;
     border-color: var(--accent-color);
     background: var(--bg-secondary);
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
     transform: translateY(-2px);
 }
 
@@ -291,7 +285,7 @@ body::before {
 }
 
 .login-btn {
-    background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-color) 0%, #1e40af 100%);
     color: white;
     border: none;
     padding: 16px;
@@ -321,7 +315,7 @@ body::before {
 
 .login-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
 }
 
 .login-btn:active {
@@ -390,7 +384,7 @@ body::before {
     color: var(--text-primary);
     font-size: 28px;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-color) 0%, #1e40af 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -637,12 +631,12 @@ body::before {
 
 .notification-info {
     border-color: var(--accent-color);
-    background: rgba(102, 126, 234, 0.1);
+    background: rgba(37, 99, 235, 0.1);
 }
 
 .welcome-card {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-    border: 1px solid rgba(102, 126, 234, 0.3);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(30, 64, 175, 0.2) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.3);
     padding: 24px;
     border-radius: 16px;
     text-align: center;
@@ -805,7 +799,7 @@ body::before {
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 12px;
-    background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-color) 0%, #1e40af 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -824,7 +818,7 @@ body::before {
 .register-btn {
     width: 100%;
     padding: 16px 24px;
-    background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-color) 0%, #1e40af 100%);
     border: none;
     border-radius: 12px;
     color: white;
@@ -854,7 +848,7 @@ body::before {
 
 .register-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
 }
 
 .register-btn:active {

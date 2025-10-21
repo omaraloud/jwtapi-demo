@@ -1,7 +1,7 @@
 README made using AI, checked for accuracy
 # JWT Authentication API
 
-A secure, production-ready JWT authentication system with comprehensive security features, logging, and CI/CD pipeline.
+A secure JWT authentication system with comprehensive security features, logging, and CI/CD pipeline.
 
 ## Features
 
@@ -34,7 +34,7 @@ jwtapi-demo/
 ## Quick Start
 
 ### Prerequisites
-- Node.js 18+
+- Node.js 
 - Docker (optional)
 - Git
 
